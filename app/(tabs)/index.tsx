@@ -1,4 +1,4 @@
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
+import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Header from '@/components/Header'
@@ -7,25 +7,44 @@ import { NewsDataType } from '@/types'
 import axios from 'axios'
 import BreakingNews from '@/components/BreakingNews'
 import Categories from '@/components/Categories'
+import NewsList from '@/components/NewsList'
 
 type Props = {}
 
 const Page = (props: Props) => {
   const { top: safeTop } = useSafeAreaInsets();
   const [breakingNews, setBreakingNews] = useState<NewsDataType[]>([]);
+  const [news, setNews] = useState<NewsDataType[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     getBreakingNews();
+    getNews();
   }, [])
+
   const getBreakingNews = async () => {
     try {
-      const URL = `https://newsdata.io/api/1/news?apikey=${process.env.EXPO_PUBLIC_API_KEY}&country=in&language=en&image=1&removeduplicate=1&size=5`;
+      const URL = `https://newsdata.io/api/1/news?apikey=${process.env.EXPO_PUBLIC_API_KEY}&language=en&image=1&removeduplicate=1&size=5`;
       const response = await axios.get(URL);
 
       // console.log('response:', response.data);
       if (response && response.data) {
         setBreakingNews(response.data.results);
+        setIsLoading(false);
+      }
+    } catch (error: any) {
+      console.error('Error fetching breaking news:', error.message);
+    }
+  };
+
+  const getNews = async () => {
+    try {
+      const URL = `https://newsdata.io/api/1/news?apikey=${process.env.EXPO_PUBLIC_API_KEY}&language=en&image=1&removeduplicate=1&size=10`;
+      const response = await axios.get(URL);
+
+      // console.log('response:', response.data);
+      if (response && response.data) {
+        setNews(response.data.results);
         setIsLoading(false);
       }
     } catch (error: any) {
@@ -39,7 +58,7 @@ const Page = (props: Props) => {
 
 
   return (
-    <View style={[styles.container, { paddingTop: safeTop }]}>
+    <ScrollView style={[styles.container, { paddingTop: safeTop }]}>
       <Header />
       <SearchBar />
       {
@@ -53,7 +72,8 @@ const Page = (props: Props) => {
           )
       }
       <Categories onCatChanged={onCatChanged} />
-    </View>
+      <NewsList newsList={news} />
+    </ScrollView>
   )
 }
 
