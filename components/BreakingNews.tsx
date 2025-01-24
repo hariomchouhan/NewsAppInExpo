@@ -59,19 +59,19 @@ const BreakingNews = ({ newsList }: Props) => {
             console.warn('viewableItems is empty or not properly formatted:', viewableItems);
         }
     };
-    
-    
+
+
     const viewabilityConfig = {
         itemVisiblePercentThreshold: 50,
     };
-    
+
     const viewablityConfigCallbackPairs = useRef([
         {
             viewabilityConfig,
             onViewableItemsChanged,
         },
     ]);
-    
+
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Breaking News</Text>

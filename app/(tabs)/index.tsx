@@ -6,6 +6,7 @@ import SearchBar from '@/components/SearchBar'
 import { NewsDataType } from '@/types'
 import axios from 'axios'
 import BreakingNews from '@/components/BreakingNews'
+import Categories from '@/components/Categories'
 
 type Props = {}
 
@@ -22,7 +23,7 @@ const Page = (props: Props) => {
       const URL = `https://newsdata.io/api/1/news?apikey=${process.env.EXPO_PUBLIC_API_KEY}&country=in&language=en&image=1&removeduplicate=1&size=5`;
       const response = await axios.get(URL);
 
-      console.log('response:', response.data);
+      // console.log('response:', response.data);
       if (response && response.data) {
         setBreakingNews(response.data.results);
         setIsLoading(false);
@@ -30,7 +31,13 @@ const Page = (props: Props) => {
     } catch (error: any) {
       console.error('Error fetching breaking news:', error.message);
     }
+  };
+
+  const onCatChanged = (category: string) => {
+    console.log('Category: ', category);    
   }
+
+
   return (
     <View style={[styles.container, { paddingTop: safeTop }]}>
       <Header />
@@ -45,6 +52,7 @@ const Page = (props: Props) => {
             <BreakingNews newsList={breakingNews} />
           )
       }
+      <Categories onCatChanged={onCatChanged} />
     </View>
   )
 }
