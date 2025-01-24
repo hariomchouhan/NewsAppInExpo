@@ -38,9 +38,13 @@ const Page = (props: Props) => {
     }
   };
 
-  const getNews = async () => {
+  const getNews = async (category:string = '') => {
     try {
-      const URL = `https://newsdata.io/api/1/news?apikey=${process.env.EXPO_PUBLIC_API_KEY}&language=en&image=1&removeduplicate=1&size=10`;
+      let categoryString = '';
+      if (category.length !== 0) {
+        categoryString = `&category=${category}`;
+      }
+      const URL = `https://newsdata.io/api/1/news?apikey=${process.env.EXPO_PUBLIC_API_KEY}&language=en&image=1&removeduplicate=1&size=10${categoryString}`;
       const response = await axios.get(URL);
 
       // console.log('response:', response.data);
@@ -49,12 +53,14 @@ const Page = (props: Props) => {
         setIsLoading(false);
       }
     } catch (error: any) {
-      console.error('Error fetching breaking news:', error.message);
+      console.error('Error fetching news:', error.message);
     }
   };
 
   const onCatChanged = (category: string) => {
-    console.log('Category: ', category);    
+    // console.log('Category: ', category);
+    setNews([]);
+    getNews(category);  
   }
 
 
