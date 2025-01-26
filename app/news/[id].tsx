@@ -4,6 +4,7 @@ import { router, Stack, useLocalSearchParams } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 import axios from 'axios'
 import { NewsDataType } from '@/types'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import Loading from '@/components/Loading'
 import { Colors } from '@/constants/Colors'
 import Moment from 'moment'
@@ -14,10 +15,18 @@ const NewsDetails = (props: Props) => {
     const { id } = useLocalSearchParams<{ id: string }>();
     const [news, setNews] = useState<NewsDataType[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [bookmark, setBookmark] = useState(false)
 
     useEffect(() => {
         getNews();
-    }, [])
+    }, []);
+
+    useEffect(() => {
+        if (!isLoading) {
+            renderBookmark(news[0].article_id)
+        }
+    }, [isLoading])
+
     const getNews = async (category: string = '') => {
         try {
             const URL = `https://newsdata.io/api/1/news?apikey=${process.env.EXPO_PUBLIC_API_KEY}&id=${id}`;
@@ -32,6 +41,51 @@ const NewsDetails = (props: Props) => {
             console.error('Error fetching news:', error.message);
         }
     };
+
+    const savedBookmark = async (newsId: string) => {
+        try {
+            const token = await AsyncStorage.getItem("bookmark");
+            let bookmarks = token ? JSON.parse(token) : [];
+    
+            // Check if already bookmarked
+            if (!bookmarks.includes(newsId)) {
+                bookmarks.push(newsId);
+                await AsyncStorage.setItem("bookmark", JSON.stringify(bookmarks));
+                setBookmark(true);
+                alert("News Saved!");
+            } else {
+                alert("Already Bookmarked!");
+            }
+        } catch (error: any) {
+            console.error("Error saving bookmark:", error.message);
+        }
+    };
+    
+    const removeBookmark = async (newsId: string) => {
+        try {
+            const token = await AsyncStorage.getItem("bookmark");
+            let bookmarks = token ? JSON.parse(token) : [];
+    
+            // Remove from bookmarks
+            bookmarks = bookmarks.filter((id: string) => id !== newsId);
+            await AsyncStorage.setItem("bookmark", JSON.stringify(bookmarks));
+            setBookmark(false);
+            alert("News Unsaved!");
+        } catch (error: any) {
+            console.error("Error removing bookmark:", error.message);
+        }
+    };
+    
+    const renderBookmark = async (newsId: string) => {
+        try {
+            const token = await AsyncStorage.getItem("bookmark");
+            const bookmarks = token ? JSON.parse(token) : [];
+            setBookmark(bookmarks.includes(newsId));
+        } catch (error: any) {
+            console.error("Error rendering bookmark:", error.message);
+        }
+    };
+    
     return (
         <>
             <Stack.Screen
@@ -42,8 +96,8 @@ const NewsDetails = (props: Props) => {
                         </TouchableOpacity>
                     ),
                     headerRight: () => (
-                        <TouchableOpacity onPress={() => console.log('Like')}>
-                            <Ionicons name='heart-outline' size={22} />
+                        <TouchableOpacity onPress={() => bookmark ? removeBookmark(news[0].article_id) : savedBookmark(news[0].article_id)}>
+                            <Ionicons name={bookmark ? 'heart' : 'heart-outline'} size={22} color={bookmark ? 'red' : 'black'} />
                         </TouchableOpacity>
                     ),
                     title: '',
