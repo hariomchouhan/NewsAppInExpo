@@ -59,7 +59,11 @@ const NewsDetails = (props: Props) => {
                         <Text style={styles.newsInfo}>{news[0].source_name}</Text>
                     </View>
                     <Image source={{ uri: news[0].image_url }} style={styles.newsImage} />
-                    <Text style={styles.newsContent}>{news[0].description}</Text>
+                    {news[0].description ? (
+                        <Text style={styles.newsContent}>{news[0].description}</Text>
+                    ) : (
+                        <Text style={styles.newsContent}>{news[0].content}</Text>
+                    )}
                 </ScrollView>
             )}
         </>
