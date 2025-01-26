@@ -6,6 +6,7 @@ import { Colors } from '@/constants/Colors'
 import newsCategoryList from '@/constants/Categories'
 import CheckBox from '@/components/CheckBox'
 import { useNewsCategories } from '@/hooks/useNewsCategories'
+import { useNewsCountries } from '@/hooks/useNewsCountries'
 
 type Props = {}
 
@@ -13,18 +14,32 @@ const Page = (props: Props) => {
   const { top: safeTop } = useSafeAreaInsets();
 
   const { newsCategories, toggleNewsCategory } = useNewsCategories()
+  const { newsCountries, toggleNewsCountry } = useNewsCountries()
   return (
     <View style={[styles.container, { paddingTop: safeTop + 20 }]}>
       <SearchBar withHorizontailPadding={false} />
       <Text style={styles.title}>Categories</Text>
       <View style={styles.listContainer}>
-        {newsCategories?.map((item, index) => (
+        {newsCategories?.map((item) => (
           <CheckBox
             key={item.id}
             label={item.title}
             checked={item.selected}
             onPress={() => {
               toggleNewsCategory(item.id)
+            }}
+          />
+        ))}
+      </View>
+      <Text style={styles.title}>Country</Text>
+      <View style={styles.listContainer}>
+        {newsCountries?.map((item, index) => (
+          <CheckBox
+            key={index}
+            label={item.name}
+            checked={item.selected}
+            onPress={() => {
+              toggleNewsCountry(index)
             }}
           />
         ))}
