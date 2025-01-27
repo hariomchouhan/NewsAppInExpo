@@ -17,7 +17,12 @@ const Page = (props: Props) => {
         }}
       />
       <View style={styles.container}>
-        <TouchableOpacity style={styles.itemBtn}>
+        <TouchableOpacity
+          style={styles.itemBtn}
+          onPress={() => {
+            alert("Coming Soon...");
+          }}
+        >
           <Text style={styles.itemBtnText}>About</Text>
           <MaterialIcons
             name="arrow-forward-ios"
@@ -25,7 +30,12 @@ const Page = (props: Props) => {
             color={Colors.lightGrey}
           />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.itemBtn}>
+        <TouchableOpacity
+          style={styles.itemBtn}
+          onPress={() => {
+            alert("Coming Soon...");
+          }}
+        >
           <Text style={styles.itemBtnText}>Send Feedback</Text>
           <MaterialIcons
             name="arrow-forward-ios"
@@ -33,7 +43,12 @@ const Page = (props: Props) => {
             color={Colors.lightGrey}
           />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.itemBtn}>
+        <TouchableOpacity
+          style={styles.itemBtn}
+          onPress={() => {
+            alert("Coming Soon...");
+          }}
+        >
           <Text style={styles.itemBtnText}>Privacy Policy</Text>
           <MaterialIcons
             name="arrow-forward-ios"
@@ -41,7 +56,12 @@ const Page = (props: Props) => {
             color={Colors.lightGrey}
           />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.itemBtn}>
+        <TouchableOpacity
+          style={styles.itemBtn}
+          onPress={() => {
+            alert("Coming Soon...");
+          }}
+        >
           <Text style={styles.itemBtnText}>Terms of Use</Text>
           <MaterialIcons
             name="arrow-forward-ios"
@@ -49,18 +69,33 @@ const Page = (props: Props) => {
             color={Colors.lightGrey}
           />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.itemBtn} onPress={toggleSwitch}>
+        <TouchableOpacity
+          style={styles.itemBtn}
+          onPress={() => {
+            toggleSwitch();
+            !isEnabled && alert("Dark Mode is not available");
+          }}
+        >
           <Text style={styles.itemBtnText}>Dark Mode</Text>
           <Switch
             trackColor={{ false: "#767577", true: "#3e3e3e" }}
             thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
-            ios_backgroundColor='#3e3e3e'
+            ios_backgroundColor="#3e3e3e"
             onValueChange={toggleSwitch}
             value={isEnabled}
-            style={{transform: [{scale: 0.6}], marginBottom: -15, marginRight: -8}}
+            style={{
+              transform: [{ scale: 0.6 }],
+              marginBottom: -15,
+              marginRight: -8,
+            }}
           />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.itemBtn}>
+        <TouchableOpacity
+          style={styles.itemBtn}
+          onPress={() => {
+            alert("Coming Soon...");
+          }}
+        >
           <Text style={[styles.itemBtnText, { color: "red" }]}>Logout</Text>
           <MaterialIcons name="logout" size={16} color={"red"} />
         </TouchableOpacity>
