@@ -1,16 +1,19 @@
-import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import Header from '@/components/Header'
-import SearchBar from '@/components/SearchBar'
-import { NewsDataType } from '@/types'
-import axios from 'axios'
-import BreakingNews from '@/components/BreakingNews'
-import Categories from '@/components/Categories'
-import NewsList from '@/components/NewsList'
-import Loading from '@/components/Loading'
+import {
+  ScrollView,
+  StyleSheet,
+} from "react-native";
+import React, { useEffect, useState } from "react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Header from "@/components/Header";
+import SearchBar from "@/components/SearchBar";
+import { NewsDataType } from "@/types";
+import axios from "axios";
+import BreakingNews from "@/components/BreakingNews";
+import Categories from "@/components/Categories";
+import NewsList from "@/components/NewsList";
+import Loading from "@/components/Loading";
 
-type Props = {}
+type Props = {};
 
 const Page = (props: Props) => {
   const { top: safeTop } = useSafeAreaInsets();
@@ -22,7 +25,7 @@ const Page = (props: Props) => {
   useEffect(() => {
     getBreakingNews();
     getNews();
-  }, [])
+  }, []);
 
   const getBreakingNews = async () => {
     try {
@@ -35,13 +38,13 @@ const Page = (props: Props) => {
         setIsLoading(false);
       }
     } catch (error: any) {
-      console.error('Error fetching breaking news:', error.message);
+      console.error("Error fetching breaking news:", error.message);
     }
   };
 
-  const getNews = async (category: string = '') => {
+  const getNews = async (category: string = "") => {
     try {
-      let categoryString = '';
+      let categoryString = "";
       if (category.length !== 0) {
         categoryString = `&category=${category}`;
       }
@@ -54,7 +57,7 @@ const Page = (props: Props) => {
         setIsLoading(false);
       }
     } catch (error: any) {
-      console.error('Error fetching news:', error.message);
+      console.error("Error fetching news:", error.message);
     }
   };
 
@@ -62,33 +65,27 @@ const Page = (props: Props) => {
     // console.log('Category: ', category);
     setNews([]);
     getNews(category);
-  }
-
+  };
 
   return (
     <ScrollView style={[styles.container, { paddingTop: safeTop }]}>
       <Header />
-      <SearchBar withHorizontailPadding={true} setSearchQuery={setSearchQuery} />
-      {
-        isLoading ?
-          (
-            <Loading size='large' />
-          )
-          :
-          (
-            <BreakingNews newsList={breakingNews} />
-          )
-      }
+      {/* <SearchBar withHorizontailPadding={true} setSearchQuery={setSearchQuery} /> */}
+      {isLoading ? (
+        <Loading size="large" />
+      ) : (
+        <BreakingNews newsList={breakingNews} />
+      )}
       <Categories onCatChanged={onCatChanged} />
       <NewsList newsList={news} />
     </ScrollView>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-})
+});
